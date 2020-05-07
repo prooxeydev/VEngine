@@ -35,26 +35,31 @@ fn (component mut SimpleComponent) set_loc(x, y int) {
 	component.loc.y = y
 }
 
+fn (component mut SimpleComponent) add_loc(x, y int) {
+	component.loc.x += x
+	component.loc.y += y
+}
+
+pub fn (component mut SimpleComponent) add_size(width, height f32) {
+	component.refactor_size(component.width + width, component.height + height)
+}
+
 pub fn (component mut SimpleComponent) refactor_size(new_width, new_height f32) {
-	component.refactor_size_by_ms(new_width, new_height, 5000)
+	component.refactor_size_by_ms(new_width, new_height, 500)
 }
 
 pub fn (component mut SimpleComponent) refactor_size_by_ms(new_width, new_height f32, time int) {
-	go component.animate_size_change(new_width, new_height, time)
+	d_w := (new_width - component.width) / (time / 14)
+	d_h := (new_height - component.height) / (time / 14)
+	go component.animate_size_change(d_w, d_h, time / 14, 0)
 }
 
-fn (component mut SimpleComponent) animate_size_change(new_width, new_height f32, t int) {
-	d_w := (new_width - component.width) / (t / 14)
-	d_h := (new_height - component.height) / (t / 14)
-	mut i := 0
-	for {
-		i += 1
-		component.width += d_w
-		component.height += d_h
-		if i == t/14 {
-			break
-		}
-		time.sleep_ms(14)
+fn (component mut SimpleComponent) animate_size_change(d_w, d_h f32, t, i int) {
+	component.width += d_w
+	component.height += d_h
+	time.sleep_ms(14)
+	if t != i {
+		component.animate_size_change(d_w, d_h, t, i + 1)
 	}
 }
 
@@ -95,7 +100,7 @@ pub fn (component mut SimpleComponent) draw(gg &gg.GG, ft &freetype.FreeType, w,
 	}
 
 	gg.draw_rect(x, y, width, height, component.color)
-
+	
 	for comp in component.components {
 		comp.draw(gg, ft, width, height)
 	}

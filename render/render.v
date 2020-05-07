@@ -6,12 +6,15 @@ import gx
 import gl
 import freetype
 import time
+import input
 
 struct RenderManager {
 	gg &gg.GG
 	window &glfw.Window
 	ft &freetype.FreeType
 mut:
+	mouse &input.Mouse
+	keyboard &input.Keyboard
 	width int
 	height int
 	scenes []&Scene
@@ -21,7 +24,7 @@ mut:
 	title string
 }
 
-pub fn create_render_manager(width, height int, game_ptr, key_down voidptr, on_click voidptr, resize voidptr) &RenderManager {
+pub fn create_render_manager(width, height int, game_ptr, key_down, on_click, resize, update_mouse voidptr) &RenderManager {
 	glfw.init_glfw()
 	window := glfw.create_window(glfw.WinCfg{
 		width: width
@@ -40,6 +43,8 @@ pub fn create_render_manager(width, height int, game_ptr, key_down voidptr, on_c
 		use_ortho: true
 		window_user_ptr: 0
 	})
+	mouse := input.create_mouse(0, 0)
+	window.onmousemove(update_mouse)
 	window.onkeydown(key_down)
 	window.on_click(on_click)
 	window.on_resize(resize)
@@ -47,6 +52,7 @@ pub fn create_render_manager(width, height int, game_ptr, key_down voidptr, on_c
 	return &RenderManager{
 		gg: gg
 		window: window
+		mouse: mouse
 		ft: 0
 		scenes: []&Scene{}
 		scene: -1
@@ -103,12 +109,60 @@ pub fn (manager mut RenderManager) change_scene(id int) {
 
 fn (manager mut RenderManager) render() {
 	scene := manager.scenes[manager.scene]
-	for component in scene.components {
-		component.draw(manager.gg, manager.ft, manager.width, manager.height)
+	if scene.components.len > 0 {
+		for component in scene.components {
+			component.draw(manager.gg, manager.ft, manager.width, manager.height)
+		}
 	}
 }
 
 fn (manager mut RenderManager) resize_v(width, height int) {
 	manager.width = width
 	manager.height = height
+}
+
+pub fn (manager mut RenderManager) mouse_move_callback(x, y f32) {
+
+}
+
+pub fn (manager mut RenderManager) mouse_click_callback(key, action, mods int) {
+	println('Key: $key, Action: $action, Mods: $mods')
+}
+
+pub fn (manager mut RenderManager) keyboard_callback(key, code, action, mods int) {
+	mut toggle := false
+	if action == 1 {
+		toggle = true
+	}
+	match key {
+		280 {
+			//Caps
+			manager.keyboard.caps = toggle
+		}
+		340 {
+			//LShift
+			manager.keyboard.l_shift = toggle
+		}
+		341 {
+			//LStrg
+			manager.keyboard.l_ctr = toggle
+		}
+		342 {
+			//LAlt
+			manager.keyboard.alt = toggle
+		}
+		344 {
+			//RShift
+			manager.keyboard.r_shift = toggle
+		}
+		345 {
+			//RStrg
+			manager.keyboard.r_ctr = toggle
+		}
+		346 {
+			//AltGr
+			manager.keyboard.alt_gr = toggle
+		} 
+		else {}
+	}
 }
