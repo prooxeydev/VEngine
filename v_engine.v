@@ -90,7 +90,7 @@ fn (app mut App) key_change(key, code, action, mods int) {
 fn on_key_down(wnd voidptr, key, code, action, mods int) {
 	mut app := &App(glfw.get_window_user_pointer(wnd))
 	app.manager.keyboard_callback(key, code, action, mods)
-	//app.key_change(key, code, action, mods)
+	app.key_change(key, code, action, mods)
 }
 
 fn on_click(wnd voidptr, button, action, mods int) {
