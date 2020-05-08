@@ -5,7 +5,19 @@ import gx
 import freetype
 import time
 
-type Component = SimpleComponent
+interface Component {
+	set_loc(x, y int)
+	add_loc(x, y int)
+	add_size(width, height f32)
+	refactor_size(new_width, new_height f32)
+	refactor_size_by_ms(new_width, new_height f32, time int)
+	add_component(comp &Component)
+	get_component(id int) &Component
+	remove_component(comp &Component)
+	get_id() int
+	draw(gg &gg.GG, ft &freetype.FreeType, w, h f32)
+	perc() bool
+}
 
 pub struct SimpleComponent {
 mut:
@@ -35,12 +47,12 @@ fn (component mut SimpleComponent) set_loc(x, y int) {
 	component.loc.y = y
 }
 
-fn (component mut SimpleComponent) add_loc(x, y int) {
+pub fn (component mut SimpleComponent) add_loc(x, y int) {
 	component.loc.x += x
 	component.loc.y += y
 }
 
-pub fn (component mut SimpleComponent) add_size(width, height f32) {
+fn (component mut SimpleComponent) add_size(width, height f32) {
 	component.refactor_size(component.width + width, component.height + height)
 }
 
@@ -48,7 +60,7 @@ pub fn (component mut SimpleComponent) refactor_size(new_width, new_height f32) 
 	component.refactor_size_by_ms(new_width, new_height, 500)
 }
 
-pub fn (component mut SimpleComponent) refactor_size_by_ms(new_width, new_height f32, time int) {
+fn (component mut SimpleComponent) refactor_size_by_ms(new_width, new_height f32, time int) {
 	d_w := (new_width - component.width) / (time / 14)
 	d_h := (new_height - component.height) / (time / 14)
 	go component.animate_size_change(d_w, d_h, time / 14, 0)
@@ -63,35 +75,41 @@ fn (component mut SimpleComponent) animate_size_change(d_w, d_h f32, t, i int) {
 	}
 }
 
-pub fn (component mut SimpleComponent) add_component(comp &Component) {
+fn (component mut SimpleComponent) add_component(comp &Component) {
 	component.components << comp
 }
 
-pub fn (component mut SimpleComponent) remove_component(comp Component) {
+fn (component mut SimpleComponent) remove_component(comp &Component) {
 	mut data := []&Component{len: component.components.len-1, cap: component.components.len-1}
 	for c in component.components {
-		if c.get_id() != comp.get_id() {
+		if ptr_str(c) != ptr_str(comp) {
 			data << c
 		}
 	}
 	component.components = data
 }
 
-pub fn (component mut SimpleComponent) get_component(id int) &Component {
+fn (component mut SimpleComponent) get_component(id int) &Component {
 	return component.components[id]
 }
 
-pub fn (component mut SimpleComponent) get_id() int {
+fn (component mut SimpleComponent) get_id() int {
 	return component.id
 }
 
-pub fn (component mut SimpleComponent) draw(gg &gg.GG, ft &freetype.FreeType, w, h f32) {
+fn (component mut SimpleComponent) perc() bool {
+	return component.perc
+}
+
+fn (component mut SimpleComponent) draw(gg &gg.GG, ft &freetype.FreeType, w, h f32) {
 	mut x := component.loc.x
 	mut y := component.loc.y
 	mut width := component.width
 	mut height := component.height
 
-	if component.perc {
+	b := component.perc()
+
+	if b {
 
 		x = (x / 100) * w
 		y = (y / 100) * h
@@ -101,7 +119,8 @@ pub fn (component mut SimpleComponent) draw(gg &gg.GG, ft &freetype.FreeType, w,
 
 	gg.draw_rect(x, y, width, height, component.color)
 	
-	for comp in component.components {
+	for i := 0; i < component.components.len; i++ {
+		comp := component.components[i]
 		comp.draw(gg, ft, width, height)
 	}
 }
