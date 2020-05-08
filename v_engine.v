@@ -88,13 +88,13 @@ fn (app mut App) key_change(key, code, action, mods int) {
 }
 
 fn on_key_down(wnd voidptr, key, code, action, mods int) {
-	mut app := &App(glfw.get_window_user_pointer(wnd))
+//	mut app := &App(glfw.get_window_user_pointer(wnd))
 //	app.manager.keyboard_callback(key, code, action, mods)
 //	app.key_change(key, code, action, mods)
 }
 
 fn on_click(wnd voidptr, button, action, mods int) {
-	mut app := &App(glfw.get_window_user_pointer(wnd))
+//	mut app := &App(glfw.get_window_user_pointer(wnd))
 //	app.manager.mouse_click_callback(button, action, mods)
 }
 
@@ -105,7 +105,7 @@ fn on_resize(wnd voidptr, width, height int) {
 }
 
 fn update_mouse(wnd voidptr, x, y f64) {
-	mut app := &App(glfw.get_window_user_pointer(wnd))
+//	mut app := &App(glfw.get_window_user_pointer(wnd))
 //	app.manager.mouse_move_callback(x, y)
 //	app.manager.mouse.update_mouse(x, y)
 }
