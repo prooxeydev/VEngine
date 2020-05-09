@@ -44,6 +44,7 @@ pub fn create_render_manager(width, height int, game_ptr, key_down, on_click, re
 		window_user_ptr: 0
 	})
 	mouse := input.create_mouse(0, 0)
+	keyboard := input.create_keyboard()
 	window.onmousemove(update_mouse)
 	window.onkeydown(key_down)
 	window.on_click(on_click)
@@ -53,6 +54,7 @@ pub fn create_render_manager(width, height int, game_ptr, key_down, on_click, re
 		gg: gg
 		window: window
 		mouse: mouse
+		keyboard: keyboard
 		ft: 0
 		scenes: []&Scene{}
 		scene: -1

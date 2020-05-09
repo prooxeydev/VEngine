@@ -10,3 +10,7 @@ mut:
 	r_shift bool
 	caps bool
 }
+
+pub fn create_keyboard() &Keyboard {
+	return &Keyboard{}
+}
