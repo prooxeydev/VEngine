@@ -113,7 +113,7 @@ fn (manager mut RenderManager) render() {
 	scene := manager.scenes[manager.scene]
 	if scene.components.len > 0 {
 		for component in scene.components {
-			//component.draw(manager.gg, manager.ft, manager.width, manager.height)
+			component.draw(manager.gg, manager.ft, manager.width, manager.height)
 		}
 	}
 }
