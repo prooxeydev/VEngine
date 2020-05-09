@@ -14,7 +14,7 @@ mut:
 }
 
 fn main() {
-	app := &App{
+	/*app := &App{
 		manager: 0
 		key_down: false
 		animate: false
@@ -29,7 +29,7 @@ fn main() {
 	s1.add_component(component1)
 	manager.change_scene(0)
 	go app.run(component)
-	manager.open(14)
+	manager.open(14)*/
 }
 
 fn (app mut App) run(component &components.SimpleComponent) {
@@ -45,57 +45,57 @@ fn (app mut App) run(component &components.SimpleComponent) {
 
 fn (app mut App) key_change(key, code, action, mods int) {
 	println('Key: $key, Code: $code, Action: $action, Mods: $mods')
-	component := app.manager.scenes[app.manager.scene].components[0]
+//	component := app.manager.scenes[app.manager.scene].components[0]
 	if action == 1 || action == 2 {
 		if key == 262 {
 			//Left
-			component.add_loc(1, 0)
+//			component.add_loc(1, 0)
 		}
 		if key == 263 {
 			//Right
-			component.add_loc(-1, 0)
+//			component.add_loc(-1, 0)
 		}
 		if key == 264 {
 			//Top
-			component.add_loc(0, 1)
+//			component.add_loc(0, 1)
 		}
 		if key == 265 {
 			//Bottom
-			component.add_loc(0, -1)
+//			component.add_loc(0, -1)
 		}
 	}
 	if key == 93 {
 		//Increase
 		if action == 1 {
-			component.refactor_size(140, 140)
+//			component.refactor_size(140, 140)
 		}
 	}
 	if key == 47 {
 		//Decrease
 		if action == 1 {
-			component.refactor_size(70, 70)
+//			component.refactor_size(70, 70)
 		}
 	}
 	if key == 258 {
 		if action == 1 {
 			if app.manager.scene == 0 {
-				app.manager.change_scene(1)
+//				app.manager.change_scene(1)
 			} else {
-				app.manager.change_scene(0)
+//				app.manager.change_scene(0)
 			}
 		}
 	}
 }
 
 fn on_key_down(wnd voidptr, key, code, action, mods int) {
-	mut app := &App(glfw.get_window_user_pointer(wnd))
-	app.manager.keyboard_callback(key, code, action, mods)
-	app.key_change(key, code, action, mods)
+//	mut app := &App(glfw.get_window_user_pointer(wnd))
+//	app.manager.keyboard_callback(key, code, action, mods)
+//	app.key_change(key, code, action, mods)
 }
 
 fn on_click(wnd voidptr, button, action, mods int) {
-	mut app := &App(glfw.get_window_user_pointer(wnd))
-	app.manager.mouse_click_callback(button, action, mods)
+//	mut app := &App(glfw.get_window_user_pointer(wnd))
+//	app.manager.mouse_click_callback(button, action, mods)
 }
 
 fn on_resize(wnd voidptr, width, height int) {
@@ -105,7 +105,7 @@ fn on_resize(wnd voidptr, width, height int) {
 }
 
 fn update_mouse(wnd voidptr, x, y f64) {
-	mut app := &App(glfw.get_window_user_pointer(wnd))
-	app.manager.mouse_move_callback(x, y)
-	app.manager.mouse.update_mouse(x, y)
+//	mut app := &App(glfw.get_window_user_pointer(wnd))
+//	app.manager.mouse_move_callback(x, y)
+//	app.manager.mouse.update_mouse(x, y)
 }
