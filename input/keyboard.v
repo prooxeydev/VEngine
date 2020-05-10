@@ -1,7 +1,7 @@
 module input
 
 struct Keyboard {
-mut:
+pub mut:
 	l_ctr bool
 	r_ctr bool
 	alt bool

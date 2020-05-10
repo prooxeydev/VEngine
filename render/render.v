@@ -12,7 +12,7 @@ struct RenderManager {
 	gg &gg.GG
 	window &glfw.Window
 	ft &freetype.FreeType
-mut:
+pub mut:
 	mouse &input.Mouse
 	keyboard &input.Keyboard
 	width int

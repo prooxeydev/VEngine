@@ -1,7 +1,7 @@
 module input
 
 struct Mouse {
-mut:
+pub mut:
 	x f64
 	y f64
 }
