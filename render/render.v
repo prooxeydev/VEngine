@@ -19,6 +19,7 @@ pub mut:
 	height int
 	scenes []&Scene
 	scene int
+	ui &Scene
 	l int
 	open bool
 	title string
@@ -57,6 +58,7 @@ pub fn create_render_manager(width, height int, game_ptr, key_down, on_click, re
 		keyboard: keyboard
 		ft: 0
 		scenes: []&Scene{}
+		ui: 0
 		scene: -1
 		l: -1
 		width: width
@@ -97,6 +99,13 @@ pub fn (manager mut RenderManager) make_scene(title string) &Scene {
 	return scene
 }
 
+pub fn (manager mut RenderManager) make_ui() &Scene {
+	manager.l += 1
+	scene := create_scene('ui', manager.l)
+	manager.ui = scene
+	return scene
+}
+
 pub fn (manager mut RenderManager) add_scene(scene &Scene) {
 	manager.scenes << scene
 }
@@ -113,6 +122,11 @@ fn (manager mut RenderManager) render() {
 	scene := manager.scenes[manager.scene]
 	if scene.components.len > 0 {
 		for component in scene.components {
+			component.draw(manager.gg, manager.ft, manager.width, manager.height)
+		}
+	}
+	if manager.ui != 0 {
+		for component in manager.ui.components {
 			component.draw(manager.gg, manager.ft, manager.width, manager.height)
 		}
 	}

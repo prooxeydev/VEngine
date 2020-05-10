@@ -120,6 +120,7 @@ fn (component mut SimpleComponent) draw(gg &gg.GG, ft &freetype.FreeType, w, h f
 	gg.draw_rect(x, y, width, height, component.color)
 	
 	for c in component.components {
-		c.draw(gg, ft, width, height)
+		dc := *c
+		dc.draw(gg, ft, width, height)
 	}
 }

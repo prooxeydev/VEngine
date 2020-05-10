@@ -6,7 +6,7 @@ import gx
 
 struct Scene {
 	id int
-mut:
+pub mut:
 	components []&components.Component
 	title string
 	background_color_r int
