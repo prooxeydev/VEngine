@@ -37,13 +37,24 @@ pub fn create_render_manager(width, height int, game_ptr, key_down, on_click, re
 	})
 	window.make_context_current()
 	gg.init_gg()
-	gg := gg.new_context(gg.Cfg{
+	gg_cfg := gg.Cfg{
 		width: width
 		height: height
 		font_size: 20
 		use_ortho: true
 		window_user_ptr: 0
-	})
+	}
+	ft_cfg := gg.Cfg{
+		width: width
+		height: height
+		font_size: 20
+		font_path: './assets/fonts/RobotoMono-Regular.ttf'
+		scale: 2
+		window_user_ptr: 0
+	}
+
+	gg := gg.new_context(gg_cfg)
+	ft := freetype.new_context(ft_cfg)
 	mouse := input.create_mouse(0, 0)
 	keyboard := input.create_keyboard()
 	window.onmousemove(update_mouse)
@@ -56,7 +67,7 @@ pub fn create_render_manager(width, height int, game_ptr, key_down, on_click, re
 		window: window
 		mouse: mouse
 		keyboard: keyboard
-		ft: 0
+		ft: ft
 		scenes: []&Scene{}
 		ui: 0
 		scene: -1

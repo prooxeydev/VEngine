@@ -75,11 +75,11 @@ fn (component mut SimpleComponent) animate_size_change(d_w, d_h f32, t, i int) {
 	}
 }
 
-fn (component mut SimpleComponent) add_component(comp &Component) {
+pub fn (component mut SimpleComponent) add_component(comp &Component) {
 	component.components << comp
 }
 
-fn (component mut SimpleComponent) remove_component(comp &Component) {
+pub fn (component mut SimpleComponent) remove_component(comp &Component) {
 	mut data := []&Component{len: component.components.len-1, cap: component.components.len-1}
 	for c in component.components {
 		if ptr_str(c) != ptr_str(comp) {
@@ -89,7 +89,7 @@ fn (component mut SimpleComponent) remove_component(comp &Component) {
 	component.components = data
 }
 
-fn (component mut SimpleComponent) get_component(id int) &Component {
+pub fn (component mut SimpleComponent) get_component(id int) &Component {
 	return component.components[id]
 }
 

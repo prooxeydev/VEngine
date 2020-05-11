@@ -32,6 +32,9 @@ fn main() {
 	ui_comp := components.simple_component(80, 90, 20, 10, true, gx.gray, []&components.Component{})
 	ui.add_component(ui_comp)
 
+	label := components.label(1, 3, 'test', true, 1, gx.white, gx.align_left, []&components.Component{})
+	ui_comp.add_component(label)
+
 	manager.change_scene(0)
 	go app.run(component)
 	manager.open(14)
